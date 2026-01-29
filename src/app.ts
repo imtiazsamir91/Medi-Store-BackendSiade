@@ -1,9 +1,12 @@
 import express, { Application } from 'express';
-import { medicineRouter } from './modules/medicine/medicine.router';
+
 import { categoryRouter } from './modules/catagory/category.router';
 import { auth } from './lib/auth';
 import { toNodeHandler } from "better-auth/node";
 import { authRouter } from './modules/auth/auth.router';
+import { medicineService } from './modules/medicine/medicine.service';
+import { medicineRouter } from './modules/medicine/medicine.router';
+
 
 
 const app:Application =express();
@@ -20,7 +23,7 @@ app.use("/api/auth", authRouter);
 app.use("/categories", categoryRouter);
 
 
-app.use('/medi',medicineRouter);
+app.use('/api', medicineRouter);
 
 
 app.get('/',(req,res)=>{

@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
-import { getCurrentUser, loginUser, registerUser } from "./auth.service";
+import { authService } from "./auth.service";
 
 
-export const registerController = async (req: Request, res: Response) => {
+
+ const registerController = async (req: Request, res: Response) => {
   try {
     const { name, email, password, role, image } = req.body;
-    const result = await registerUser({ name, email, password, role, image });
+    const result = await authService.registerUser({ name, email, password, role, image });
 
     if (result.error) {
       return res.status(422).json({ success: false, message: result.error, user: result.user });
@@ -18,10 +19,10 @@ export const registerController = async (req: Request, res: Response) => {
   }
 };
 
-export const loginController = async (req: Request, res: Response) => {
+ const loginController = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-    const result = await loginUser(email, password);
+    const result = await authService.loginUser(email, password);
 
     if (result.error) {
       return res.status(401).json({ success: false, message: result.error });
@@ -34,7 +35,7 @@ export const loginController = async (req: Request, res: Response) => {
   }
 };
 
-export const getMeController = async (req: Request, res: Response) => {
+ const getMeController = async (req: Request, res: Response) => {
   try {
     const authHeader = req.headers.authorization;
     if (!authHeader) return res.status(401).json({ success: false, message: "No token" });
@@ -42,7 +43,7 @@ export const getMeController = async (req: Request, res: Response) => {
     const token = authHeader.split(" ")[1];
     if (!token) return res.status(401).json({ success: false, message: "No token" });
 
-    const result = await getCurrentUser(token);
+    const result = await authService.getCurrentUser(token);
 
     if (result.error) return res.status(401).json({ success: false, message: result.error });
 
@@ -52,3 +53,8 @@ export const getMeController = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+export const authController = {
+  registerController,
+  loginController,
+  getMeController
+}

@@ -1,12 +1,14 @@
-import  express, { Router }  from "express";
+import { Router } from "express";
 import { medicineController } from "./medicine.controller";
 
+const router = Router();
 
-const router=express.Router();
+// Changed from POST /medicines to GET /categories
+router.get("/categories", medicineController.getAllCategoriesController);
 
+// Medicine routes
+router.post("/medicines", medicineController.addMedicine);
+router.get("/medicines", medicineController.getAllMedicinesController);
+router.get("/medicines/:id", medicineController.getMedicineByIdController);
 
-router.post('/',
-    medicineController.addMedicines
-);
-
-export const medicineRouter:Router=router;
+export const medicineRouter = router;

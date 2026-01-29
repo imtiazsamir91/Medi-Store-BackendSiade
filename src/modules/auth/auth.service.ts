@@ -6,7 +6,7 @@ const allowedRoles = ["CUSTOMER", "SELLER", "ADMIN"] as const;
 type RoleType = (typeof allowedRoles)[number];
 
 // ---------------- REGISTER USER ----------------
-export const registerUser = async ({
+ const registerUser = async ({
   name,
   email,
   password,
@@ -27,7 +27,7 @@ export const registerUser = async ({
     return { error: "User already exists", user: result.user };
   }
 
-  // ✅ Enum-safe role assignment
+
   const userRole: RoleType = allowedRoles.includes(role as RoleType)
     ? (role as RoleType)
     : "CUSTOMER";
@@ -43,7 +43,7 @@ export const registerUser = async ({
 };
 
 // ---------------- LOGIN USER ----------------
-export const loginUser = async (email: string, password: string) => {
+ const loginUser = async (email: string, password: string) => {
   const result = await auth.api.signInEmail({ body: { email, password } });
 
   if (!result.token) {
@@ -54,7 +54,7 @@ export const loginUser = async (email: string, password: string) => {
 };
 
 // ---------------- GET CURRENT USER ----------------
-export const getCurrentUser = async (token: string) => {
+ const getCurrentUser = async (token: string) => {
   const session = await prisma.session.findUnique({
     where: { token },
     include: { user: true },
@@ -64,3 +64,8 @@ export const getCurrentUser = async (token: string) => {
 
   return { user: session.user };
 };
+export const authService = {
+    registerUser,   
+    loginUser,   
+    getCurrentUser
+}
