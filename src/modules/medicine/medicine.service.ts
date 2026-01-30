@@ -87,6 +87,57 @@ const deleteMedicine = async ({ medicineId, sellerId }: { medicineId: string; se
   return { success: true };
 };
 
+//revirw service
+
+interface CreateReviewInput {
+  userId: string;
+  medicineId: string;
+  rating: number;
+  comment: string;
+}
+
+const createReview = async ({ userId, medicineId, rating, comment }: CreateReviewInput) => {
+  // Validate rating
+  if (rating < 1 || rating > 5) throw new Error("Rating must be between 1 and 5");
+
+  // Optional: Check if user has already ordered this medicine
+  const orderExists = await prisma.orderItem.findFirst({
+    where: {
+      medicineId,
+      order: { userId },
+    },
+  });
+
+  if (!orderExists) throw new Error("You can only review medicines you have purchased");
+
+  const review = await prisma.review.create({
+    data: {
+      userId,
+      medicineId,
+      rating,
+      comment,
+    },
+  });
+
+  return review;
+};
+
+const getReviewsByMedicine = async (medicineId: string) => {
+  return prisma.review.findMany({
+    where: { medicineId },
+    include: { user: { select: { id: true, name: true, image: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
+const getReviewsByUser = async (userId: string) => {
+  return prisma.review.findMany({
+    where: { userId },
+    include: { medicine: { select: { id: true, name: true } } },
+    orderBy: { createdAt: "desc" },
+  });
+};
+
 export const medicineService = {
   addMedicine,
   getAllMedicines,
@@ -95,4 +146,8 @@ export const medicineService = {
   getSellerMedicines,
   updateMedicine,
   deleteMedicine,
+  createReview,
+  getReviewsByMedicine,
+  getReviewsByUser,
+
 };

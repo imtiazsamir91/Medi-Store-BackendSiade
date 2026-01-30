@@ -117,6 +117,43 @@ const deleteMedicineController = async (req: Request, res: Response) => {
   }
 };
 
+// ---------------- GET REVIEWS BY MEDICINE ----------------
+
+const createReviewController = async (req: Request, res: Response) => {
+  try {
+    const { userId, medicineId, rating, comment } = req.body;
+
+    if (!userId) throw new Error("userId is required");
+    if (!medicineId) throw new Error("medicineId is required");
+    if (!rating) throw new Error("rating is required");
+
+    const review = await medicineService.createReview({ userId, medicineId, rating, comment });
+
+    res.status(201).json({ success: true, review });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+const getReviewsByMedicineController = async (req: Request, res: Response) => {
+  try {
+    const { id: medicineId } = req.params;
+    const reviews = await medicineService.getReviewsByMedicine(medicineId as string);
+    res.status(200).json({ success: true, reviews });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+const getReviewsByUserController = async (req: Request, res: Response) => {
+  try {
+    const { id: userId } = req.params;
+    const reviews = await medicineService.getReviewsByUser(userId as string);
+    res.status(200).json({ success: true, reviews });
+  } catch (error: any) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
 export const medicineController = {
   addMedicine,
   getAllMedicinesController,
@@ -125,4 +162,7 @@ export const medicineController = {
   getAllCategoriesController,
   updateMedicineController,
   deleteMedicineController,
+  getReviewsByMedicineController,
+  createReviewController,
+  getReviewsByUserController, 
 };

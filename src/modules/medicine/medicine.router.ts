@@ -14,4 +14,11 @@ router.get("/medicines/:id", medicineController.getMedicineByIdController);
 router.put("/seller/medicines/:id", medicineController.updateMedicineController);
 router.delete("/seller/medicines/:id", medicineController.deleteMedicineController);
 
+//review
+router.post("/reviews", medicineController.createReviewController);
+router.get("/medicine/:id", medicineController.getReviewsByMedicineController);
+router.get("/user/:id", medicineController.getReviewsByUserController);
+
+
+
 export const medicineRouter = router;
