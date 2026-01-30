@@ -182,4 +182,5 @@ export const orderService = {
   getOrderById,
   getSellerOrders,
   updateOrderStatus,
+  reviewService,
 };
