@@ -11,5 +11,7 @@ router.post("/seller/medicines", medicineController.addMedicine);
 router.get('/medicines', medicineController.getAllMedicinesController); 
 
 router.get("/medicines/:id", medicineController.getMedicineByIdController);
+router.put("/seller/medicines/:id", medicineController.updateMedicineController);
+router.delete("/seller/medicines/:id", medicineController.deleteMedicineController);
 
 export const medicineRouter = router;

@@ -3,24 +3,20 @@ import { prisma } from "../../lib/prisma";
 
 
 
-  const addMedicine = async (data: Omit<Medicine, "id" | "createdAt" | "updatedAt" | "reviews" | "orders">) => {
-  try {
-    const result = await prisma.medicine.create({
-      data: {
-        name: data.name,
-        description: data.description,
-        price: data.price,
-        stock: data.stock,
-        categoryId: data.categoryId,
-        sellerId: data.sellerId,
-      },
-    });
-    return result;
-  } catch (error) {
-    console.error("Error in addMedicine:", error);
-    throw error;
-  }
+ const addMedicine = async (data: Omit<Medicine, "id" | "createdAt" | "updatedAt" | "reviews" | "orders"> & { sellerId: string }) => {
+  const result = await prisma.medicine.create({
+    data: {
+      name: data.name,
+      description: data.description,
+      price: data.price,
+      stock: data.stock,
+      categoryId: data.categoryId,
+      sellerId: data.sellerId, // <-- অবশ্যই এখানে value থাকবে
+    },
+  });
+  return result;
 };
+
 
 const getAllMedicines = async (filters?: { name?: string; categoryId?: string }) => {
   const where: any = {};
@@ -67,10 +63,56 @@ const getAllCategories = async () => {
   });
 };
 
+
+const updateMedicine = async ({
+  medicineId,
+  sellerId,
+  data,
+}: {
+  medicineId: string;
+  sellerId: string;
+  data: Partial<Omit<Medicine, "id" | "createdAt" | "updatedAt" | "reviews" | "orders" | "sellerId">>;
+}) => {
+  const medicine = await prisma.medicine.findFirst({ where: { id: medicineId, sellerId } });
+  if (!medicine) throw new Error("Medicine not found or unauthorized");
+  return await prisma.medicine.update({ where: { id: medicineId }, data });
+};
+ const deleteMedicine = async ({
+  medicineId,
+  sellerId,
+}: {
+  medicineId: string;
+  sellerId: string;
+}) => {
+  try {
+    const medicine = await prisma.medicine.findFirst({
+      where: {
+        id: medicineId,
+        sellerId,
+      },
+    });
+
+    if (!medicine) {
+      throw new Error("Medicine not found or unauthorized");
+    }
+
+    await prisma.medicine.delete({
+      where: { id: medicineId },
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error("Error in deleteMedicine:", error);
+    throw error;
+  }
+};
+
 export const medicineService = {
    
   getAllMedicines,
   getMedicineById,
   getAllCategories,
    addMedicine,
+  updateMedicine,
+  deleteMedicine,
 };
