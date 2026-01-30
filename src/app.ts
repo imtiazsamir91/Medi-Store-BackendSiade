@@ -6,7 +6,7 @@ import { authRouter } from './modules/auth/auth.router';
 
 import { medicineRouter } from './modules/medicine/medicine.router';
 import { orderRouter } from './modules/orders/order.router';
- 
+ import cors from 'cors';
 
 
 
@@ -15,7 +15,10 @@ import { orderRouter } from './modules/orders/order.router';
 const app:Application =express();
 //app.all("/api/auth/*splat", toNodeHandler(auth));
 
-
+app.use(cors({
+    origin: process.env.APP_URL || 'http://localhost:4000',
+    credentials: true,
+}))
 
 app.use(express.json());
 
