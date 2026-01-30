@@ -7,7 +7,7 @@ const router = Router();
 router.get("/categories", medicineController.getAllCategoriesController);
 
 // Medicine routes
-router.post("/medicines", medicineController.addMedicine);
+router.post("/seller/medicines", medicineController.addMedicine);
 router.get('/medicines', medicineController.getAllMedicinesController); 
 
 router.get("/medicines/:id", medicineController.getMedicineByIdController);
