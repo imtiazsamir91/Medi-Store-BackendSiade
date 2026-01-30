@@ -7,10 +7,15 @@ import { orderController } from "./order.controller";
 const router = Router();
 
 // POST /categories → category create
-router.post("/", orderController.createOrder);
+router.post("/orders", orderController.createOrder);
 
 // GET /categories  category fetch
-router.get("/", orderController.fetchOrder);
-router.get("/:id",orderController.getOrderByIdController);
+router.get("/orders", orderController.fetchOrder);
+router.get("/orders/:id",orderController.getOrderByIdController);
+
+
+router.get("/seller/orders", orderController.getSellerOrdersController);
+router.patch("/seller/orders/:id", orderController.updateOrderStatusController);
+
 
 export const orderRouter = router;

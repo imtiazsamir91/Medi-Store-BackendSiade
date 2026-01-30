@@ -25,7 +25,7 @@ app.use("/api/auth", authRouter);
 // Category routes
 app.use("/categories", categoryRouter);
 
-app.use('/api/orders', orderRouter);
+app.use('/api', orderRouter);
 
 
 app.use('/api', medicineRouter);
