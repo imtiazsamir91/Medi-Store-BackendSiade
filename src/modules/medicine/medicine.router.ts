@@ -8,7 +8,8 @@ router.get("/categories", medicineController.getAllCategoriesController);
 
 // Medicine routes
 router.post("/medicines", medicineController.addMedicine);
-router.get("/medicines", medicineController.getAllMedicinesController);
+router.get('/medicines', medicineController.getAllMedicinesController); 
+
 router.get("/medicines/:id", medicineController.getMedicineByIdController);
 
 export const medicineRouter = router;

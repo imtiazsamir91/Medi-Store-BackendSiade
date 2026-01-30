@@ -1,11 +1,14 @@
 import express, { Application } from 'express';
 
 import { categoryRouter } from './modules/catagory/category.router';
-import { auth } from './lib/auth';
-import { toNodeHandler } from "better-auth/node";
+
 import { authRouter } from './modules/auth/auth.router';
-import { medicineService } from './modules/medicine/medicine.service';
+
 import { medicineRouter } from './modules/medicine/medicine.router';
+import { orderRouter } from './modules/orders/order.router';
+ 
+
+
 
 
 
@@ -21,6 +24,8 @@ app.use("/api/auth", authRouter);
 
 // Category routes
 app.use("/categories", categoryRouter);
+
+app.use('/api/orders', orderRouter);
 
 
 app.use('/api', medicineRouter);
